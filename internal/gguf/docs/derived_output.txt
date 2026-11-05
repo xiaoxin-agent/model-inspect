@@ -1,0 +1,263 @@
+## static_assert cross-check (struct layout vs upstream assert)
+
+- block_q1_0: assert expr = 18B, computed = 18B -> OK
+- block_q2_0: assert expr = 18B, computed = 18B -> OK
+- block_q4_0: assert expr = 18B, computed = 18B -> OK
+- block_q4_1: assert expr = 20B, computed = 20B -> OK
+- block_mxfp4: assert expr = 17B, computed = 17B -> OK
+- block_nvfp4: assert expr = 36B, computed = 36B -> OK
+- block_q5_0: assert expr = 22B, computed = 22B -> OK
+- block_q5_1: assert expr = 24B, computed = 24B -> OK
+- block_q8_0: assert expr = 34B, computed = 34B -> OK
+- block_q8_1: assert expr = 36B, computed = 36B -> OK
+- block_tq1_0: assert expr = 54B, computed = 54B -> OK
+- block_tq2_0: assert expr = 66B, computed = 66B -> OK
+- block_q2_K: assert expr = 84B, computed = 84B -> OK
+- block_q3_K: assert expr = 110B, computed = 110B -> OK
+- block_q4_K: assert expr = 144B, computed = 144B -> OK
+- block_q5_K: assert expr = 176B, computed = 176B -> OK
+- block_q6_K: assert expr = 210B, computed = 210B -> OK
+- block_q8_K: assert expr = 292B, computed = 292B -> OK
+- block_iq2_xxs: assert expr = 66B, computed = 66B -> OK
+- block_iq2_xs: assert expr = 74B, computed = 74B -> OK
+- block_iq2_s: assert expr = 82B, computed = 82B -> OK
+- block_iq3_xxs: assert expr = 98B, computed = 98B -> OK
+- block_iq3_s: assert expr = 110B, computed = 110B -> OK
+- block_iq1_s: assert expr = 50B, computed = 50B -> OK
+- block_iq1_m: assert expr = 56B, computed = 56B -> OK
+- block_iq4_nl: assert expr = 18B, computed = 18B -> OK
+- block_iq4_xs: assert expr = 136B, computed = 136B -> OK
+
+## enum from ggml.h (GGML_TYPE_COUNT = 44)
+
+| id | enum name | short | block_elems | block_bytes | source |
+|---:|---|---|---:|---:|---|
+| 0 | GGML_TYPE_F32 | F32 | 1 | 4 | raw scalar (type_traits not needed) |
+| 1 | GGML_TYPE_F16 | F16 | 1 | 2 | raw scalar (type_traits not needed) |
+| 2 | GGML_TYPE_Q4_0 | Q4_0 | 32 | 18 | QK macro + sizeof(static_assert expr) |
+| 3 | GGML_TYPE_Q4_1 | Q4_1 | 32 | 20 | QK macro + sizeof(static_assert expr) |
+| 4 | *(reserved, not in enum)* | - | - | - | ggml.h enum has no entry |
+| 5 | *(reserved, not in enum)* | - | - | - | ggml.h enum has no entry |
+| 6 | GGML_TYPE_Q5_0 | Q5_0 | 32 | 22 | QK macro + sizeof(static_assert expr) |
+| 7 | GGML_TYPE_Q5_1 | Q5_1 | 32 | 24 | QK macro + sizeof(static_assert expr) |
+| 8 | GGML_TYPE_Q8_0 | Q8_0 | 32 | 34 | QK macro + sizeof(static_assert expr) |
+| 9 | GGML_TYPE_Q8_1 | Q8_1 | 32 | 36 | QK macro + sizeof(static_assert expr) |
+| 10 | GGML_TYPE_Q2_K | Q2_K | 256 | 84 | QK macro + sizeof(static_assert expr) |
+| 11 | GGML_TYPE_Q3_K | Q3_K | 256 | 110 | QK macro + sizeof(static_assert expr) |
+| 12 | GGML_TYPE_Q4_K | Q4_K | 256 | 144 | QK macro + sizeof(static_assert expr) |
+| 13 | GGML_TYPE_Q5_K | Q5_K | 256 | 176 | QK macro + sizeof(static_assert expr) |
+| 14 | GGML_TYPE_Q6_K | Q6_K | 256 | 210 | QK macro + sizeof(static_assert expr) |
+| 15 | GGML_TYPE_Q8_K | Q8_K | 256 | 292 | QK macro + sizeof(static_assert expr) |
+| 16 | GGML_TYPE_IQ2_XXS | IQ2_XXS | 256 | 66 | QK macro + sizeof(static_assert expr) |
+| 17 | GGML_TYPE_IQ2_XS | IQ2_XS | 256 | 74 | QK macro + sizeof(static_assert expr) |
+| 18 | GGML_TYPE_IQ3_XXS | IQ3_XXS | 256 | 98 | QK macro + sizeof(static_assert expr) |
+| 19 | GGML_TYPE_IQ1_S | IQ1_S | 256 | 50 | QK macro + sizeof(static_assert expr) |
+| 20 | GGML_TYPE_IQ4_NL | IQ4_NL | 32 | 18 | QK macro + sizeof(static_assert expr) |
+| 21 | GGML_TYPE_IQ3_S | IQ3_S | 256 | 110 | QK macro + sizeof(static_assert expr) |
+| 22 | GGML_TYPE_IQ2_S | IQ2_S | 256 | 82 | QK macro + sizeof(static_assert expr) |
+| 23 | GGML_TYPE_IQ4_XS | IQ4_XS | 256 | 136 | QK macro + sizeof(static_assert expr) |
+| 24 | GGML_TYPE_I8 | I8 | 1 | 1 | raw scalar (type_traits not needed) |
+| 25 | GGML_TYPE_I16 | I16 | 1 | 2 | raw scalar (type_traits not needed) |
+| 26 | GGML_TYPE_I32 | I32 | 1 | 4 | raw scalar (type_traits not needed) |
+| 27 | GGML_TYPE_I64 | I64 | 1 | 8 | raw scalar (type_traits not needed) |
+| 28 | GGML_TYPE_F64 | F64 | 1 | 8 | raw scalar (type_traits not needed) |
+| 29 | GGML_TYPE_IQ1_M | IQ1_M | 256 | 56 | QK macro + sizeof(static_assert expr) |
+| 30 | GGML_TYPE_BF16 | BF16 | 1 | 2 | raw scalar (type_traits not needed) |
+| 31 | *(reserved, not in enum)* | - | - | - | ggml.h enum has no entry |
+| 32 | *(reserved, not in enum)* | - | - | - | ggml.h enum has no entry |
+| 33 | *(reserved, not in enum)* | - | - | - | ggml.h enum has no entry |
+| 34 | GGML_TYPE_TQ1_0 | TQ1_0 | 256 | 54 | QK macro + sizeof(static_assert expr) |
+| 35 | GGML_TYPE_TQ2_0 | TQ2_0 | 256 | 66 | QK macro + sizeof(static_assert expr) |
+| 36 | *(reserved, not in enum)* | - | - | - | ggml.h enum has no entry |
+| 37 | *(reserved, not in enum)* | - | - | - | ggml.h enum has no entry |
+| 38 | *(reserved, not in enum)* | - | - | - | ggml.h enum has no entry |
+| 39 | GGML_TYPE_MXFP4 | MXFP4 | 32 | 17 | QK macro + sizeof(static_assert expr) |
+| 40 | GGML_TYPE_NVFP4 | NVFP4 | 64 | 36 | QK macro + sizeof(static_assert expr) |
+| 41 | GGML_TYPE_Q1_0 | Q1_0 | 128 | 18 | QK macro + sizeof(static_assert expr) |
+| 42 | GGML_TYPE_Q2_0 | Q2_0 | 64 | 18 | QK macro + sizeof(static_assert expr) |
+| 43 | GGML_TYPE_F8_E4M3 | F8_E4M3 | 1 | 1 | raw scalar (type_traits not needed) |
+
+## Comparison: derived vs constants.py GGML_QUANT_SIZES
+
+| id | short | derived (elems,bytes) | constants.py (elems,bytes) | match |
+|---:|---|---|---|---|
+| 4 | - | (-,-) | MISSING | - |
+| 5 | - | (-,-) | MISSING | - |
+| 31 | - | (-,-) | MISSING | - |
+| 32 | - | (-,-) | MISSING | - |
+| 33 | - | (-,-) | MISSING | - |
+| 36 | - | (-,-) | MISSING | - |
+| 37 | - | (-,-) | MISSING | - |
+| 38 | - | (-,-) | MISSING | - |
+
+match=36 diff=0 missing_in_constants=8
+in constants.py but not in ggml.h: none
+in constants.py enum but not in ggml.h: none
+ids in constants.py enum missing from ggml.h: none
+
+## GCC probe cross-check (compiled sizeof against real struct definitions)
+
+| short | python layout | gcc sizeof | match |
+|---|---:|---:|---|
+| Q1_0 | 18 | 18 | OK |
+| Q2_0 | 18 | 18 | OK |
+| Q4_0 | 18 | 18 | OK |
+| Q4_1 | 20 | 20 | OK |
+| MXFP4 | 17 | 17 | OK |
+| NVFP4 | 36 | 36 | OK |
+| Q5_0 | 22 | 22 | OK |
+| Q5_1 | 24 | 24 | OK |
+| Q8_0 | 34 | 34 | OK |
+| Q8_1 | 36 | 36 | OK |
+| TQ1_0 | 54 | 54 | OK |
+| TQ2_0 | 66 | 66 | OK |
+| Q2_K | 84 | 84 | OK |
+| Q3_K | 110 | 110 | OK |
+| Q4_K | 144 | 144 | OK |
+| Q5_K | 176 | 176 | OK |
+| Q6_K | 210 | 210 | OK |
+| Q8_K | 292 | 292 | OK |
+| IQ2_XXS | 66 | 66 | OK |
+| IQ2_XS | 74 | 74 | OK |
+| IQ2_S | 82 | 82 | OK |
+| IQ3_XXS | 98 | 98 | OK |
+| IQ3_S | 110 | 110 | OK |
+| IQ1_S | 50 | 50 | OK |
+| IQ1_M | 56 | 56 | OK |
+| IQ4_NL | 18 | 18 | OK |
+| IQ4_XS | 136 | 136 | OK |
+
+gcc mismatches: 0
+
+## Struct layout details
+
+### block_q1_0 = block_Q1_0
+  - ggml_half d[None]: 2*1=2B (align 2)
+  - uint8_t qs[QK1_0 / 8]: 1*16=16B (align 1)
+  => sizeof = 18
+### block_q2_0 = block_Q2_0
+  - ggml_half d[None]: 2*1=2B (align 2)
+  - uint8_t qs[QK2_0 / 4]: 1*16=16B (align 1)
+  => sizeof = 18
+### block_q4_0 = block_Q4_0
+  - ggml_half d[None]: 2*1=2B (align 2)
+  - uint8_t qs[QK4_0 / 2]: 1*16=16B (align 1)
+  => sizeof = 18
+### block_q4_1 = block_Q4_1
+  - union GGML_COMMON_AGGR_U (packed member): 4B (align 4)
+  - uint8_t qs[QK4_1 / 2]: 1*16=16B (align 1)
+  => sizeof = 20
+### block_mxfp4 = block_MXFP4
+  - uint8_t e[None]: 1*1=1B (align 1)
+  - uint8_t qs[QK_MXFP4/2]: 1*16=16B (align 1)
+  => sizeof = 17
+### block_nvfp4 = block_NVFP4
+  - uint8_t d[QK_NVFP4/QK_NVFP4_SUB]: 1*4=4B (align 1)
+  - uint8_t qs[QK_NVFP4/2]: 1*32=32B (align 1)
+  => sizeof = 36
+### block_q5_0 = block_Q5_0
+  - ggml_half d[None]: 2*1=2B (align 2)
+  - uint8_t qh[4]: 1*4=4B (align 1)
+  - uint8_t qs[QK5_0 / 2]: 1*16=16B (align 1)
+  => sizeof = 22
+### block_q5_1 = block_Q5_1
+  - union GGML_COMMON_AGGR_U (packed member): 4B (align 4)
+  - uint8_t qh[4]: 1*4=4B (align 1)
+  - uint8_t qs[QK5_1 / 2]: 1*16=16B (align 1)
+  => sizeof = 24
+### block_q8_0 = block_Q8_0
+  - ggml_half d[None]: 2*1=2B (align 2)
+  - int8_t qs[QK8_0]: 1*32=32B (align 1)
+  => sizeof = 34
+### block_q8_1 = block_Q8_1
+  - union GGML_COMMON_AGGR_U (packed member): 4B (align 4)
+  - int8_t qs[QK8_1]: 1*32=32B (align 1)
+  => sizeof = 36
+### block_tq1_0 = block_TQ1_0
+  - uint8_t qs[(QK_K - 4 * QK_K / 64) / 5]: 1*48=48B (align 1)
+  - uint8_t qh[QK_K/64]: 1*4=4B (align 1)
+  - ggml_half d[None]: 2*1=2B (align 2)
+  => sizeof = 54
+### block_tq2_0 = block_TQ2_0
+  - uint8_t qs[QK_K/4]: 1*64=64B (align 1)
+  - ggml_half d[None]: 2*1=2B (align 2)
+  => sizeof = 66
+### block_q2_k = block_Q2_K
+  - union GGML_COMMON_AGGR_U (packed member): 4B (align 4)
+  - uint8_t scales[QK_K/16]: 1*16=16B (align 1)
+  - uint8_t qs[QK_K/4]: 1*64=64B (align 1)
+  => sizeof = 84
+### block_q3_k = block_Q3_K
+  - uint8_t hmask[QK_K/8]: 1*32=32B (align 1)
+  - uint8_t qs[QK_K/4]: 1*64=64B (align 1)
+  - uint8_t scales[12]: 1*12=12B (align 1)
+  - ggml_half d[None]: 2*1=2B (align 2)
+  => sizeof = 110
+### block_q4_k = block_Q4_K
+  - union GGML_COMMON_AGGR_U (packed member): 4B (align 4)
+  - uint8_t scales[K_SCALE_SIZE]: 1*12=12B (align 1)
+  - uint8_t qs[QK_K/2]: 1*128=128B (align 1)
+  => sizeof = 144
+### block_q5_k = block_Q5_K
+  - union GGML_COMMON_AGGR_U (packed member): 4B (align 4)
+  - uint8_t scales[K_SCALE_SIZE]: 1*12=12B (align 1)
+  - uint8_t qh[QK_K/8]: 1*32=32B (align 1)
+  - uint8_t qs[QK_K/2]: 1*128=128B (align 1)
+  => sizeof = 176
+### block_q6_k = block_Q6_K
+  - uint8_t ql[QK_K/2]: 1*128=128B (align 1)
+  - uint8_t qh[QK_K/4]: 1*64=64B (align 1)
+  - int8_t scales[QK_K/16]: 1*16=16B (align 1)
+  - ggml_half d[None]: 2*1=2B (align 2)
+  => sizeof = 210
+### block_q8_k = block_Q8_K
+  - float d[None]: 4*1=4B (align 4)
+  - int8_t qs[QK_K]: 1*256=256B (align 1)
+  - int16_t bsums[QK_K/16]: 2*16=32B (align 2)
+  => sizeof = 292
+### block_iq2_xxs = block_IQ2_XXS
+  - ggml_half d[None]: 2*1=2B (align 2)
+  - uint16_t qs[QK_K/8]: 2*32=64B (align 2)
+  => sizeof = 66
+### block_iq2_xs = block_IQ2_XS
+  - ggml_half d[None]: 2*1=2B (align 2)
+  - uint16_t qs[QK_K/8]: 2*32=64B (align 2)
+  - uint8_t scales[QK_K/32]: 1*8=8B (align 1)
+  => sizeof = 74
+### block_iq2_s = block_IQ2_S
+  - ggml_half d[None]: 2*1=2B (align 2)
+  - uint8_t qs[QK_K/4]: 1*64=64B (align 1)
+  - uint8_t qh[QK_K/32]: 1*8=8B (align 1)
+  - uint8_t scales[QK_K/32]: 1*8=8B (align 1)
+  => sizeof = 82
+### block_iq3_xxs = block_IQ3_XXS
+  - ggml_half d[None]: 2*1=2B (align 2)
+  - uint8_t qs[3*QK_K/8]: 1*96=96B (align 1)
+  => sizeof = 98
+### block_iq3_s = block_IQ3_S
+  - ggml_half d[None]: 2*1=2B (align 2)
+  - uint8_t qs[QK_K/4]: 1*64=64B (align 1)
+  - uint8_t qh[QK_K/32]: 1*8=8B (align 1)
+  - uint8_t signs[QK_K/8]: 1*32=32B (align 1)
+  - uint8_t scales[IQ3S_N_SCALE]: 1*4=4B (align 1)
+  => sizeof = 110
+### block_iq1_s = block_IQ1_S
+  - ggml_half d[None]: 2*1=2B (align 2)
+  - uint8_t qs[QK_K/8]: 1*32=32B (align 1)
+  - uint16_t qh[QK_K/32]: 2*8=16B (align 2)
+  => sizeof = 50
+### block_iq1_m = block_IQ1_M
+  - uint8_t qs[QK_K/8]: 1*32=32B (align 1)
+  - uint8_t qh[QK_K/16]: 1*16=16B (align 1)
+  - uint8_t scales[QK_K/32]: 1*8=8B (align 1)
+  => sizeof = 56
+### block_iq4_nl = block_IQ4_NL
+  - ggml_half d[None]: 2*1=2B (align 2)
+  - uint8_t qs[QK4_NL/2]: 1*16=16B (align 1)
+  => sizeof = 18
+### block_iq4_xs = block_IQ4_XS
+  - ggml_half d[None]: 2*1=2B (align 2)
+  - uint16_t scales_h[None]: 2*1=2B (align 2)
+  - uint8_t scales_l[QK_K/64]: 1*4=4B (align 1)
+  - uint8_t qs[QK_K/2]: 1*128=128B (align 1)
+  => sizeof = 136
