@@ -36,3 +36,5 @@ JSON 输出包含每个 tensor 的形状、dtype、元素数、payload 大小和
 GGML v1 使用 4 字节 `lmgg` magic，后跟 7 个 little-endian `uint32` 超参数。词表项是
 `uint32` 长度加 token 字节；没有 score，也没有 tensor 对齐填充。Tensor 数据按 header
 声明的大小跳过。格式行为参考 llama.cpp 的旧 GGML 转换器；本工具不依赖或调用该转换器。
+
+字段布局和逐段示意参见 [GGML v1 文件格式说明](docs/ggml-v1-format.md)。
